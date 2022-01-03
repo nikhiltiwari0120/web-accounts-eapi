@@ -53,7 +53,7 @@ jobs:
       with:
         java-version: 1.8
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: $WORKSPACE # location for the settings.xml file
+        settings-path: web-accounts-eapi/.github/ # location for the settings.xml file
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
@@ -61,4 +61,4 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-:  :  
     - name: Deploy to Cloudhub
-      run: mvn clean deploy -DmuleDeploy -s $WORKSPACE/settings.xml --file $WORKSPACE/pom.xml -Dcloudhub_uri="$CLOUDHUB_URI" -Dcloudhub_username="$CLOUDHUB_USERNAME" -Dcloudhub_password="$CLOUDHUB_PASSWORD" -Dcloudhub_environment="$CLOUDHUB_ENVIRONMENT" -Dcloudhub_runtime="$CLOUDHUB_RUNTIME" -Dcloudhub_workers="$CLOUDHUB_WORKERS" -Dcloudhub_workerType="$CLOUDHUB_WORKER_TYPE" -Dcloudhub_region="$CLOUDHUB_REGION" -Danypoint_platform_client_id="$ANYPOINT_PLATFORM_CLIENT_ID" -Danypoint_platform_client_secret="$ANYPOINT_PLATFORM_CLIENT_SECRET" -Denv="$env" -Danypoint_platform_config_analytics_agent_enabled="$ANYPOINT_PLATFORM_ANALYTICS_AGENT_ENABLED" -Dhttp_request_protocol="$http_request_protocol" -Dhttp_request_host="$http_request_host" -Dhttp_request_basepath="$http_request_basepath" -DAccounts_Proxy_SystemAPI_CLIENT_ID="$Accounts_Proxy_SystemAPI_CLIENT_ID" -DAccounts_Proxy_SystemAPI_CLIENT_SECRET="$Accounts_Proxy_SystemAPI_CLIENT_SECRET" -Dkeystore="$keystore" -Dalias="$alias" -Dkeypassword="$keypassword" -Dpassword="$password" -DskipMunitTests
+      run: mvn clean deploy -DmuleDeploy -s web-accounts-eapi/.github/settings.xml --file web-accounts-eapi/pom.xml -Dcloudhub_uri="$CLOUDHUB_URI" -Dcloudhub_username="$CLOUDHUB_USERNAME" -Dcloudhub_password="$CLOUDHUB_PASSWORD" -Dcloudhub_environment="$CLOUDHUB_ENVIRONMENT" -Dcloudhub_runtime="$CLOUDHUB_RUNTIME" -Dcloudhub_workers="$CLOUDHUB_WORKERS" -Dcloudhub_workerType="$CLOUDHUB_WORKER_TYPE" -Dcloudhub_region="$CLOUDHUB_REGION" -Danypoint_platform_client_id="$ANYPOINT_PLATFORM_CLIENT_ID" -Danypoint_platform_client_secret="$ANYPOINT_PLATFORM_CLIENT_SECRET" -Denv="$env" -Danypoint_platform_config_analytics_agent_enabled="$ANYPOINT_PLATFORM_ANALYTICS_AGENT_ENABLED" -Dhttp_request_protocol="$http_request_protocol" -Dhttp_request_host="$http_request_host" -Dhttp_request_basepath="$http_request_basepath" -DAccounts_Proxy_SystemAPI_CLIENT_ID="$Accounts_Proxy_SystemAPI_CLIENT_ID" -DAccounts_Proxy_SystemAPI_CLIENT_SECRET="$Accounts_Proxy_SystemAPI_CLIENT_SECRET" -Dkeystore="$keystore" -Dalias="$alias" -Dkeypassword="$keypassword" -Dpassword="$password" -DskipMunitTests
