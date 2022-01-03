@@ -26,8 +26,8 @@ jobs:
       ANYPOINT_PLATFORM_ANALYTICS_AGENT_ENABLED: true
 
       ## Mulesoft Nexus Repository Credentials
-      #MULE_NEXUS_USERNAME: ${{ secrets.MULE_NEXUS_USERNAME }}
-      #MULE_NEXUS_PASSWORD: ${{ secrets.MULE_NEXUS_PASSWORD }}
+      MULE_NEXUS_USERNAME: ${{ secrets.MULE_NEXUS_USERNAME }}
+      MULE_NEXUS_PASSWORD: ${{ secrets.MULE_NEXUS_PASSWORD }}
        
       ## API Specific Properties
       env: ${{ secrets.env }}
