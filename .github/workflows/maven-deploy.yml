@@ -1,0 +1,64 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Maven Package
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build_and_deploy:
+
+    runs-on: ubuntu-latest
+    env:
+      ## Cloudhub Properties -- Refernence: https://docs.mulesoft.com/mule-runtime/3.9/mule-maven-plugin
+      CLOUDHUB_URI: ${{ secrets.CLOUDHUB_URI }}
+      CLOUDHUB_USERNAME: ${{ secrets.CLOUDHUB_USERNAME }}
+      CLOUDHUB_PASSWORD: ${{ secrets.CLOUDHUB_PASSWORD }}
+      CLOUDHUB_ENVIRONMENT: ${{ secrets.CLOUDHUB_ENVIRONMENT }}
+      CLOUDHUB_RUNTIME: ${{ secrets.CLOUDHUB_RUNTIME }}
+      CLOUDHUB_WORKERS: ${{ secrets.CLOUDHUB_WORKERS }}
+      CLOUDHUB_WORKER_TYPE: ${{ secrets.CLOUDHUB_WORKER_TYPE }}
+      CLOUDHUB_REGION: ${{ secrets.CLOUDHUB_REGION }}
+      ANYPOINT_PLATFORM_CLIENT_ID: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }}
+      ANYPOINT_PLATFORM_CLIENT_SECRET: ${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET}}
+      ANYPOINT_PLATFORM_ANALYTICS_AGENT_ENABLED: true
+
+      ## Mulesoft Nexus Repository Credentials
+      #MULE_NEXUS_USERNAME: ${{ secrets.MULE_NEXUS_USERNAME }}
+      #MULE_NEXUS_PASSWORD: ${{ secrets.MULE_NEXUS_PASSWORD }}
+       
+      ## API Specific Properties
+      env: ${{ secrets.env }}
+      http_request_protocol: ${{ secrets.http_request_protocol }}
+      http_request_host: ${{ secrets.http_request_host }}
+      http_request_basepath: ${{ secrets.http_request_basepath }}
+      Accounts_Proxy_SystemAPI_CLIENT_ID: ${{ secrets.SFMC_SYSTEMAPI_CLIENT_ID }}
+      Accounts_Proxy_SystemAPI_CLIENT_SECRET: ${{ secrets.SFMC_SYSTEMAPI_CLIENT_SECRET }}
+      keystore: ${{ secrets.keystore }}
+      alias: ${{ secrets.alias }}
+      keypassword: ${{ secrets.keypassword }}
+      password: ${{ secrets.password }}
+      
+      
+      ## --- Notes ---
+      # To Skip MUnit Tests: Add -DskipMunitTests to the run command at the bottom
+      # How to reference a GitHub Secret: ${{ secrets.SECRET_NAME }}
+      
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+        settings-path: $WORKSPACE # location for the settings.xml file
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/settings.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-:  :  
+    - name: Deploy to Cloudhub
+      run: mvn clean deploy -DmuleDeploy -s $WORKSPACE/settings.xml --file $WORKSPACE/pom.xml -Dcloudhub.username="$CLOUDHUB_URI" -Dcloudhub.username="$CLOUDHUB_USERNAME" -Dcloudhub.password="$CLOUDHUB_PASSWORD" -Dcloudhub.environment="$CLOUDHUB_ENVIRONMENT" -Dcloudhub.runtime="$CLOUDHUB_RUNTIME" -Dcloudhub.workers="$CLOUDHUB_WORKERS" -Dcloudhub.worker.type="$CLOUDHUB_WORKER_TYPE" -Dcloudhub.region="$CLOUDHUB_REGION" -Danypoint.platform.client_id="$ANYPOINT_PLATFORM_CLIENT_ID" -Danypoint.platform.client_secret="$ANYPOINT_PLATFORM_CLIENT_SECRET" -Denv="$env" -Danypoint.platform.config.analytics.agent.enabled="$ANYPOINT_PLATFORM_ANALYTICS_AGENT_ENABLED" -Dhttp_request_protocol="$http_request_protocol" -Dhttp_request_host="$http_request_host" -Dhttp_request_basepath="$http_request_basepath" -DAccounts_Proxy_SystemAPI_CLIENT_ID="$Accounts_Proxy_SystemAPI_CLIENT_ID" -DAccounts_Proxy_SystemAPI_CLIENT_SECRET="$Accounts_Proxy_SystemAPI_CLIENT_SECRET" -Dkeystore="$keystore" -Dalias="$alias" -Dkeypassword="$keypassword" -Dpassword="$password" -DskipMunitTests
