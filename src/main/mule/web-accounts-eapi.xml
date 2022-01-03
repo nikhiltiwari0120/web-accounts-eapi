@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d4b989f8-7ed6-4ed0-943d-c7d33bc91419" >
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="8092" tlsContext="TLS_Context"/>
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1ca7e4fa-5bbb-4e0e-ac23-f3ad265dd353" basePath="${http_request_basepath}" >
+		<http:request-connection protocol="${http_request_protocol}" host="${http_request_host}" />
+	</http:request-config>
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="6663b9c6-0ec3-4e25-bf44-5b6f39b43059" >
+		<tls:key-store type="jks" path="${keystore}" alias="${alias}" keyPassword="${keypassword}" password="${password}" />
+	</tls:context>
+	<!-- <configuration-properties doc:name="Configuration properties" doc:id="99c42dbf-91c9-4970-9c07-a957aa9cd576" file="properties\dev-accounts-eapi.properties" /> -->
+	<flow name="web-accounts-eapiFlow" doc:id="fbf7a91c-b0d0-4b3c-9fbe-419f8c43fb7c" >
+		<http:listener doc:name="Listener" doc:id="db830e86-2d10-40a6-a24b-af2a3e40c0c5" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="5a8f5579-2bce-41e5-a631-d0db6f9f0fc7" message='#["flow started"]'/>
+		<http:request method="POST" doc:name="Request" doc:id="e8255565-29a6-4b3f-b140-e629bc899735" config-ref="HTTP_Request_configuration" path="accounts.login" outputMimeType="application/json">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	client_secret : p('Accounts_Proxy_SystemAPI_CLIENT_SECRET'),
+	client_id : p('Accounts_Proxy_SystemAPI_CLIENT_ID')
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="78719690-7324-4ab4-89d3-d03127586535" message='#["Flow end"]'/>
+	</flow>
+</mule>
