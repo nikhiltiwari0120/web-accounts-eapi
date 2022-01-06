@@ -74,6 +74,21 @@
 	</dependencies>
 
 	<repositories>
+		<distributionManagement>
+    <repository>
+              <id>MuleEERepo</id>
+              <name>MuleRepository</name>
+              <url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+              <layout>default</layout>
+              <releases>
+                  <enabled>true</enabled>
+              </releases>
+              <snapshots>
+                  <enabled>true</enabled>
+              </snapshots>
+          </repository>
+    
+</distributionManagement>
 		<repository>
 			<id>anypoint-exchange-v2</id>
 			<name>Anypoint Exchange</name>
