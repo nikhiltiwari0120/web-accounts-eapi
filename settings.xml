@@ -121,8 +121,8 @@ under the License.
     <server>
       <id>Exchange2</id>
       <!-- NOTE: In order to be able to publish assets to exchange, this user will need Exchange Contributor Role -->
-      <username>*****left</username>
-      <password>******password</password>
+      <username>saikanth_m</username>
+      <password>Sai@060991</password>
 	</server>
 
     <!-- Another sample, using keys to authenticate.
