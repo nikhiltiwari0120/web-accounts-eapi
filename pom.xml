@@ -76,9 +76,9 @@
 	</dependencies>
 	<distributionManagement>
 		<repository>
-			<id>MuleEERepo</id>
-			<name>MuleRepository</name>
-			<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+			<id>Exchange2</id>
+			<name>hschein Exchange Repository</name>			
+			<url>https://maven.anypoint.mulesoft.com/api/v2/organizations/49b22249-fe43-449c-8967-bb4b7fb48942/maven</url>
 			<layout>default</layout>
 			<releases>
 				<enabled>true</enabled>
